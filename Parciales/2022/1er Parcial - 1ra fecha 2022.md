@@ -1,10 +1,16 @@
-1. Resolver con SEMÁFOROS el siguiente problema. En una planta verificadora de vehículos, existen 7 estaciones donde
-se dirigen 150 vehículos para ser verificados. Cuando un vehículo llega a la planta, el coordinador de la planta le
-indica a qué estación debe dirigirse. El coordinador selecciona la estación que tenga menos vehículos asignados en ese
-momento. Una vez que el vehículo sabe qué estación le fue asignada, se dirige a la misma y espera a que lo llamen
-para verificar. Luego de la revisión, la estación le entrega un comprobante que indica si pasó la revisión o no. Más allá
-del resultado, el vehículo se retira de la planta. Nota: maximizar la concurrencia. 
+# 1er Parcial - 1ra fecha 2022
 
+## 1. SEMÁFOROS
+
+Resolver con **SEMÁFOROS** el siguiente problema.
+
+En una planta verificadora de vehículos, existen 7 estaciones donde se dirigen 150 vehículos para ser verificados. Cuando un vehículo llega a la planta, el coordinador de la planta le indica a qué estación debe dirigirse. El coordinador selecciona la estación que tenga menos vehículos asignados en ese momento. Una vez que el vehículo sabe qué estación le fue asignada, se dirige a la misma y espera a que lo llamen para verificar. Luego de la revisión, la estación le entrega un comprobante que indica si pasó la revisión o no. Más allá del resultado, el vehículo se retira de la planta.
+
+> **Nota:** maximizar la concurrencia.
+
+### Resolución
+
+```cpp
 Process vehiculo[id: 0 .. 149] {
     P(mutex_cola);
     cola.push(id);
@@ -63,19 +69,24 @@ Process estacion[id: 0 .. 6] {
         V(esperando_llamado[id_aux]);
     }
 }
+```
 
-2. Resolver con MONITORES el siguiente problema. En un sistema operativo se ejecutan 20 procesos que
-periódicamente realizan cierto cómputo mediante la función Procesar(). Los resultados de dicha función son
-persistidos en un archivo, para lo que se requiere de acceso al subsistema de E/S. Sólo un proceso a la vez puede hacer
-uso del subsistema de E/S, y el acceso al mismo se define por la prioridad del proceso (menor valor indica mayor
-prioridad).
+---
 
+## 2. MONITORES
 
+Resolver con **MONITORES** el siguiente problema.
+
+En un sistema operativo se ejecutan 20 procesos que periódicamente realizan cierto cómputo mediante la función `Procesar()`. Los resultados de dicha función son persistidos en un archivo, para lo que se requiere de acceso al subsistema de E/S. Sólo un proceso a la vez puede hacer uso del subsistema de E/S, y el acceso al mismo se define por la prioridad del proceso (menor valor indica mayor prioridad).
+
+### Resolución
+
+```cpp
 Process proceso[id: 0 .. 19] {
     int prioridad = Prioridad();
     int resul;
     while(true) {
-        resul = Procesar(); 
+        resul = Procesar();
         sistemaOperativo.llegue(id,prioridad);
         Persistir(resul);
         sistemaOperativo.salir();
@@ -90,7 +101,7 @@ Monitor sistemaOperativo {
     bool libre = true;
 
     procedure llegue(id: IN int, prio: IN int) {
-        
+
         if(!libre) {
             cola.push((id,prio));
             esperando++;
@@ -114,3 +125,4 @@ Monitor sistemaOperativo {
     }
 
 }
+```
