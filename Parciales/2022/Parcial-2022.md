@@ -44,6 +44,38 @@ como los mozos trabajan de a un plato por vez. Modele el funcionamiento del rest
 bandeja de platos listos puede almacenar hasta P platos. No es necesario modelar a los comensales ni que
 los procesos terminen
 
+sem Listo = 1;
+sem mutex_C = 1;
+sem mutex_M = 1;
+sem PlatoListo = 0;
+int listos = 1;
+int Usando = 1;
+int platos[P];
+
+Process cocinero[id: 0 .. C-1] {
+    int plato;
+    while(true) {
+        plato = CocinandoPlato();
+        P(Listo);
+        platos[listos] = plato;
+        P(mutex_C);
+        listos = (listos + 1) mod P;
+        P(mutex_C);
+        V(PlatoListo);
+    }
+}
+
+Process mozos[id: 0 .. M-1] {
+    while(true) {
+        P(PlatoListo);
+        platos[Usando] = plato;
+        P(mutex_M);
+        Usando = (Usando + 1) mod P;
+        P(mutex_M);
+        V(Listo);
+    }
+}
+
 
 3. MONITORES. 
 Una boletería vende E entradas para un partido, y hay P personas (P>E) que quieren comprar. 
