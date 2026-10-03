@@ -1,7 +1,16 @@
-1. Resolver con SEMÁFOROS el siguiente problema. Para un experimento se tiene una red con 15 controladores de temperatura y dos módulos centrales. Los controladores cada cierto tiempo toman la temperatura mediante la función 
-medir() y la envía para que alguna de las centrales le indique que debe hacer (número de 1 a 10), y luego realiza esa acción mediante la función actuar(). Las centrales atienden los pedidos de los controladores de acuerdo al orden de llegada, usando la función determinar() para determinar la acción que deberá hacer ese controlador (número de 1 a 10). Nota: el tiempo que espera cada controlador para tomar nuevamente la temperatura empieza a contar después de haber ejecutado la función actuar().
+# 1er Parcial - 1ra Fecha 2023 (ATIC)
 
+## 1. SEMÁFOROS
 
+Resolver con **SEMÁFOROS** el siguiente problema.
+
+Para un experimento se tiene una red con 15 controladores de temperatura y dos módulos centrales. Los controladores cada cierto tiempo toman la temperatura mediante la función `medir()` y la envía para que alguna de las centrales le indique qué debe hacer (número de 1 a 10), y luego realiza esa acción mediante la función `actuar()`. Las centrales atienden los pedidos de los controladores de acuerdo al orden de llegada, usando la función `determinar()` para determinar la acción que deberá hacer ese controlador (número de 1 a 10).
+
+> **Nota:** el tiempo que espera cada controlador para tomar nuevamente la temperatura empieza a contar después de haber ejecutado la función `actuar()`.
+
+### Resolución
+
+```cpp
 sem mutex_tem=1, avisar=0, esperando[15] = ([15],0);
 Cola cola;
 int relizar[15];
@@ -9,7 +18,7 @@ int relizar[15];
 Procces controlador[id: 0 .. 14] {
     int temperatura
     int miAccion;
-    while(true) {
+    while(true){
         temperatura = medir();
 
         P(mutex_tem);
@@ -18,7 +27,7 @@ Procces controlador[id: 0 .. 14] {
         V(avisar);
         P(esperando[id]);
         mi_accion = acciones[id];
-        actuar(mi_accion); 
+        actuar(mi_accion);
         delay();
     }
 }
@@ -38,10 +47,21 @@ Process modulo[id: 0 .. 1] {
         V(esperando[id_contro]);
     }
 }
+```
 
+---
 
-2. Resolver con MONITORES el siguiente problema. Hay una boletería virtual que vende en forma online E entradas para un partido de fútbol a P personas (P > E) de acuerdo con el orden de llegada. Cuando la boletería atiende a una persona, si aún quedan entradas disponibles le envía el número de entrada vendida, sino le indica que no hay más entradas. Nota: suponga que existe la función vender() que simula la venta de la entrada.
+## 2. MONITORES
 
+Resolver con **MONITORES** el siguiente problema.
+
+Hay una boletería virtual que vende en forma online E entradas para un partido de fútbol a P personas (P > E) de acuerdo con el orden de llegada. Cuando la boletería atiende a una persona, si aún quedan entradas disponibles le envía el número de entrada vendida, sino le indica que no hay más entradas.
+
+> **Nota:** suponga que existe la función `vender()` que simula la venta de la entrada.
+
+### Resolución
+
+```cpp
 Process persona[id: 0 .. P-1] {
     int numEntrada;
     boleteria.llegue(id,numEntrada);
@@ -91,11 +111,21 @@ Monitor Admin {
     }
 
 }
+```
 
+---
 
-3. Resolver con MONITORES la siguiente situación. En un camino turístico hay un puente por donde puede pasar un vehículo a la vez. Hay N autos que deben pasar por él de acuerdo con el orden de llegada. Nota: sólo se pueden usar los procesos Autos (y los monitores que sean necesarios); suponga que existe la función pasar() que simula el paso del auto por el puente.
+## 3. MONITORES
 
+Resolver con **MONITORES** la siguiente situación.
 
+En un camino turístico hay un puente por donde puede pasar un vehículo a la vez. Hay N autos que deben pasar por él de acuerdo con el orden de llegada.
+
+> **Nota:** sólo se pueden usar los procesos Autos (y los monitores que sean necesarios); suponga que existe la función `pasar()` que simula el paso del auto por el puente.
+
+### Resolución
+
+```cpp
 Process Auto[id: 0 .. N-1] {
     admin.llegue();
     pasar() //pasando
@@ -126,3 +156,4 @@ Monitor admin {
     }
 
 }
+```
