@@ -1,11 +1,12 @@
-1. Se debe simular el uso de un sistema virtual de venta de entradas para un evento musical. El sistema cuenta con C
-cajeros virtuales que atienden indefinidamente. Sin embargo, como la venta de entradas comienza a una hora
-determinada, sólo atienden a partir del aviso de un Timer. Una vez que reciben dicho aviso, los cajeros atienden de
-acuerdo con el orden de llegada de los compradores. La atención consiste en recibir la solicitud del comprador
-(datos para el pago) y responderle si pudo comprar (o no) junto al comprobante de la operación. Para este evento
-se cuenta con E entradas y N compradores, donde cada comprador puede solicitar a lo suma una entrada. Resuelva
-usando SEMÁFOROS.
+# Primer Parcial - 1ra Fecha
 
+## 1. SEMÁFOROS
+
+Se debe simular el uso de un sistema virtual de venta de entradas para un evento musical. El sistema cuenta con C cajeros virtuales que atienden indefinidamente. Sin embargo, como la venta de entradas comienza a una hora determinada, sólo atienden a partir del aviso de un Timer. Una vez que reciben dicho aviso, los cajeros atienden de acuerdo con el orden de llegada de los compradores. La atención consiste en recibir la solicitud del comprador (datos para el pago) y responderle si pudo comprar (o no) junto al comprobante de la operación. Para este evento se cuenta con E entradas y N compradores, donde cada comprador puede solicitar a lo sumo una entrada. Resuelva usando **SEMÁFOROS**.
+
+### Resolución
+
+```cpp
 Cola cola;
 Cola respuesta;
 sem mutex_cola = 1;
@@ -36,14 +37,14 @@ Process cajero[id: 0 .. C-1] {
 
         P(mutex_entradas);
         if (entradas > 0) {
-            
+
             pudo_aux = procesarPago(pago_comprador);
             if (pudo_aux == true) {
-                entradas--; 
+                entradas--;
                 comp_aux = "Ticket y Recibo";
             }
         } else {
-            
+
             pudo_aux = false;
             comp_aux = "Agotado";
         }
@@ -80,14 +81,17 @@ Process Reloj {
         V(arranco[i]);
     }
 }
+```
 
+---
 
+## 2. MONITORES
 
-2. Existen N personas que desean acceder a un mirador al borde del lago Nahuel Huapi en Bariloche. Como el mirador
-es angosto, sólo puede ser usado por una persona a la vez. Resuelva con MONITORES los dos casos siguientes:
-a. El acceso al mirador es por orden de llegada.
+Existen N personas que desean acceder a un mirador al borde del lago Nahuel Huapi en Bariloche. Como el mirador es angosto, sólo puede ser usado por una persona a la vez. Resuelva con **MONITORES** los dos casos siguientes:
 
+### a) El acceso al mirador es por orden de llegada
 
+```cpp
 Process persona[id 0..N-1] {
     admin.llegue();
     //mirando
@@ -118,9 +122,11 @@ Monitor admin {
     }
 
 }
+```
 
-b. El acceso al mirador es por orden de llegada, pero dando prioridad a los mayores de 60 años.
+### b) El acceso al mirador es por orden de llegada, pero dando prioridad a los mayores de 60 años
 
+```cpp
 Process persona[id 0..N-1] {
     admin.llegue(id,edad);
     //mirando
@@ -152,7 +158,7 @@ Monitor admin {
             int id_aux;
             if(!colaMayores.isEmply()) {
                 colaMayores.pop(id_aux);
-            } else { 
+            } else {
                 colaMenores.pop(id_aux);
             }
             esperando--;
@@ -163,3 +169,4 @@ Monitor admin {
     }
 
 }
+```
