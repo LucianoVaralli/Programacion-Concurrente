@@ -9,7 +9,7 @@ int relizar[15];
 Procces controlador[id: 0 .. 14] {
     int temperatura
     int miAccion;
-    while(true){
+    while(true) {
         temperatura = medir();
 
         P(mutex_tem);
